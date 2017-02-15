@@ -5,6 +5,7 @@ class Tree(object):
         self.root = Node()
 
     def populateTree(self, valuesList):
+        # Assumes a binary tree and populates it like a binary search tree without removing duplicates
         #check empty list
         self.root.value = valuesList[0]
         for i in range(1, len(valuesList)):
