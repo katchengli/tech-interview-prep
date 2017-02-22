@@ -1,4 +1,4 @@
-from structures.tree import Tree
+from structures.tree import Tree, Node
 
 class BinarySearchTree(Tree):
     def __init__(self):
@@ -27,5 +27,18 @@ class BinarySearchTree(Tree):
                     else:
                         currentNode = currentNode.rightChild
 
-        def findValue(self, value):
-            continue
+    def findValue(self, value):
+        currentNode = self.root
+        while True:
+            if currentNode.value == value:
+                return True
+            if value >= currentNode.value:
+                if currentNode.rightChild is None:
+                    return False
+                else:
+                    currentNode = currentNode.rightChild
+            else:
+                if currentNode.leftChild is None:
+                    return False
+                else:
+                    currentNode = currentNode.leftChild
