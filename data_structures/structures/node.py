@@ -5,6 +5,11 @@ class Node(object):
         self.rightChild = None
         self.leftChild = None
 
+    def __init__(self, value):
+        self.value = value
+        self.rightChild = None
+        self.leftChild = None
+
     def __str__(self):
         strrep = '[' + str(self.value) + ', (' + str(self.leftChild) + ', ' + str(self.rightChild) + ')]'
         return strrep
