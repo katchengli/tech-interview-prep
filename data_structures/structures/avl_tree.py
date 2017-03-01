@@ -30,29 +30,14 @@ class AVLTree(object):
         found = False
         currentNode = self.root
         while not found:
-            print('here')
-            print(currentNode.value)
             if currentNode.value == value:
                 found = True
                 successor = self.findSuccessor(currentNode)
-                print('there')
-                print(successor.value)
                 if successor == None:
                     self.updateBalanceDelete(currentNode)
-                    if currentNode.isLeftChild():
-                        currentNode.parent.leftChild = None
-                    elif currentNode.isRightChild():
-                        currentNode.parent.rightChild = None
-
                 else:
                     self.updateBalanceDelete(successor)
-                    if successor.isLeftChild():
-                        successor.parent.leftChild = None
-                    elif successor.isRightChild():
-                        successor.parent.rightChild = None
-
                     currentNode.value = successor.value
-
             elif value < currentNode.value:
                 currentNode = currentNode.leftChild
             elif value > currentNode.value:
@@ -64,17 +49,26 @@ class AVLTree(object):
 
 
     def findSuccessor(self, node):
-        if node.rightChild == None:
-            return node.leftChild
-        foundSuccessor = False
-        current = node
-        while not foundSuccessor:
-            current = current.leftChild
-            if current == None or current.leftChild == None:
-                foundSuccessor = True
-
-        return current
-
+        if node.leftChild == None and node.rightChild == None:
+            return None
+        inorderStack = list()
+        currentNode = node
+        seen = False
+        latestPopped = None
+        while inorderStack or currentNode is not None:
+            if currentNode is not None:
+                inorderStack.append(currentNode)
+                currentNode = currentNode.leftChild
+            else:
+                currentNode = inorderStack.pop()
+                if currentNode == node and latestPopped is not None:
+                    return latestPopped
+                latestPopped = currentNode
+                if seen:
+                    return currentNode
+                if currentNode == node:
+                    seen = True
+                currentNode = currentNode.rightChild
 
     def updateBalanceInsert(self, child):
         parent = child.parent
@@ -95,13 +89,31 @@ class AVLTree(object):
         parent = child.parent
 
         if parent != None:
+            updateParent = False
+            diffFactor = 0
             if child == parent.leftChild:
                 parent.balanceFactor -= 1
+                diffFactor = -1
+                parent.leftChild = None
+                if parent.rightChild == None:
+                    updateParent = True
             elif child == parent.rightChild:
                 parent.balanceFactor += 1
+                diffFactor = 1
+                parent.rightChild = None
+                if parent.leftChild == None:
+                    updateParent = True
 
-            if parent.balanceFactor != 0:
-                self.updateBalanceDelete(parent)
+            # propagate the height change/balance factor change upwards
+            if updateParent:
+                while parent != None:
+                    if parent.balanceFactor > 1 or parent.balanceFactor < -1:
+                        self.rebalance(parent)
+                        return
+
+                    parent = parent.parent
+                    if parent != None:
+                        parent.balanceFactor += diffFactor
 
     def rotateLeft(self, oldRoot):
         #promote right child in this left rotation
