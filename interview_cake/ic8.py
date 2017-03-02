@@ -1,3 +1,5 @@
+from collections import deque
+
 class BinaryTreeNode:
 
     def __init__(self, value):
@@ -12,6 +14,10 @@ class BinaryTreeNode:
     def insert_right(self, value):
         self.right = BinaryTreeNode(value)
         return self.right
+
+    def __str__(self):
+        nodeStr = '[' + str(self.value) + ', (' + str(self.left) + ', ' + str(self.right) + ')]'
+        return nodeStr
 
 class BinaryTree(object):
     def __init__(self):
@@ -45,7 +51,9 @@ class BinaryTree(object):
 
 
     def isSuperbalanced(self):
-        superBalancedLeafSet = self.preOrder(self.root, 0)
+        #superBalancedLeafSet = self.preOrderCountRecursive(self.root, 0)
+        #superBalancedLeafSet = self.preOrderCountIterative(self.root)
+        superBalancedLeafSet = self.breadthFirstCountIterative(self.root)
 
         if len(superBalancedLeafSet) == 1 or len(superBalancedLeafSet) == 0:
             return True
@@ -62,7 +70,52 @@ class BinaryTree(object):
         else:
             return True
 
-    def preOrder(self, node, count):
+    def breadthFirstCountIterative(self, node):
+        countSet = set()
+        currentNode = None
+        count = 0
+        bfQueue = deque()
+        bfCountQueue = deque()
+        bfQueue.append(node)
+        bfCountQueue.append(count)
+
+        while bfQueue:
+            currentNode = bfQueue.popleft()
+            count = bfCountQueue.popleft()
+            if currentNode.left == None and currentNode.right == None:
+                countSet.add(count)
+            if currentNode.left != None:
+                bfQueue.append(currentNode.left)
+                bfCountQueue.append(count+1)
+            if currentNode.right != None:
+                bfQueue.append(currentNode.right)
+                bfCountQueue.append(count+1)
+
+        return countSet
+
+
+    def preOrderCountIterative(self, node): # does not have intended behaviour for the count oops
+        countSet = set()
+        preOrderStack = list()
+        preOrderStack.append(node)
+        currentNode = None
+        count = 0
+        while preOrderStack:
+            currentNode = preOrderStack.pop()
+            if currentNode.left == None and currentNode.right == None:
+                print('Here')
+                print(count)
+                countSet.add(count)
+            else:
+                count += 1
+            if currentNode.right != None:
+                preOrderStack.append(currentNode.right)
+            if currentNode.left != None:
+                preOrderStack.append(currentNode.left)
+
+        return countSet
+
+    def preOrderCountRecursive(self, node, count):#not preorder
         countSet = set()
         if node == None:
             return set()
