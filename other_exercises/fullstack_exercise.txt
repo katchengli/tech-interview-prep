@@ -1,0 +1,16 @@
+Using a language of your choice, please create a website that displays the weather at the visitor’s current estimated location.
+ OpenWeatherMap provides an easy to use API for getting the weather given location coordinates.
+
+Requirements
+
+Please use the geolocation APIs built into the browser to determine the user’s location.
+
+The API request to get the weather from openweathermap.org should be made from your backend code, not from javascript. In other words, you will need to send the user location to your backend, make the API request, then send the result back to the front-end.
+
+You may use any 3rd party libraries that you wish.
+
+Use any extra time you have to improve your code quality or the front-end user experience.
+
+The website must function in Google Chrome or Firefox. Cross-browser support is not required.
+
+1 hour

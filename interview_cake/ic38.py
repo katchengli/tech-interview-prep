@@ -3,6 +3,7 @@ import random
 def rand5():
     return random.randint(1, 5)
 
+# Does not work because it is not a uniform distribution of randomness
 def rand7bleh():
     number = 0
 
