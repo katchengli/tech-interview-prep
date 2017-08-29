@@ -7,7 +7,7 @@ def findNeighbours(current, columnHeight, rowLength):
     lastColumn = (current[1] == (rowLength-1))
 
     neighbours = list()
-    
+
     # Adding the top neighbours
     if not firstRow:
         neighbours.append((current[0]-1, current[1]))
@@ -30,14 +30,6 @@ def findNeighbours(current, columnHeight, rowLength):
 
     return neighbours
 
-def generateQueue(nbRows, nbCols):
-    queue = deque()
-    for i in range(nbRows):
-        for j in range(nbCols):
-            queue.append((i, j))
-
-    return queue
-
 def visitIsland(grid, current, visited):
     islandSet = 1
     visitingList = findNeighbours(current, len(grid), len(grid[0]))
@@ -53,18 +45,20 @@ def visitIsland(grid, current, visited):
     return islandSet, visited
 
 def getBiggestRegion(grid):
-    visitingQueue = generateQueue(len(grid), len(grid[0]))
     largestSet = 0
     visited = set()
+    nbRows = len(grid)
+    nbCols = len(grid[0])
 
-    while visitingQueue:
-        current = visitingQueue.popleft()
-        if current not in visited:
-            visited.add(current)
-            if grid[current[0]][current[1]] == 1:
-                islandSet, visited = visitIsland(grid, current, visited)
-                if islandSet > largestSet:
-                    largestSet = islandSet
+    for i in range(nbRows):
+        for j in range(nbCols):
+            current = (i, j)
+            if current not in visited:
+                visited.add(current)
+                if grid[current[0]][current[1]] == 1:
+                    islandSet, visited = visitIsland(grid, current, visited)
+                    if islandSet > largestSet:
+                        largestSet = islandSet
 
     return largestSet
 
